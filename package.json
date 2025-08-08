@@ -11,15 +11,21 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "@visx/axis": "^3.12.0",
+    "@visx/group": "^3.12.0",
+    "@visx/scale": "^3.12.0",
+    "@visx/shape": "^3.12.0",
+    "@visx/tooltip": "^3.12.0",
+    "@visx/vendor": "^3.12.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.2.0",
     "@types/jsdom": "^21.1.0",
     "@types/node": "^18.14.2",
-    "@types/react": "^19.1.9",
-    "@types/react-dom": "^19.1.7",
+    "@types/react": "^18.3.23",
+    "@types/react-dom": "^18.3.7",
     "@vitejs/plugin-react": "^5.0.0",
     "eslint": "^8.34.0",
     "jsdom": "^21.1.0",
