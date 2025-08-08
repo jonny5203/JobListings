@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "title": "Senior Frontend Engineer",
+    "company": "Tech Solutions Inc.",
+    "location": "San Francisco, CA",
+    "description": "We are looking for a seasoned Frontend Engineer to join our team. You will be responsible for building and maintaining our web applications.",
+    "technologies": ["React", "TypeScript", "Node.js"],
+    "posted_season": "Spring"
+  },
+  {
+    "id": 2,
+    "title": "Data Scientist",
+    "company": "Data Insights LLC",
+    "location": "New York, NY",
+    "description": "Join our data science team to analyze large datasets and build predictive models.",
+    "technologies": ["Python", "TensorFlow", "scikit-learn"],
+    "posted_season": "Summer"
+  },
+  {
+    "id": 3,
+    "title": "DevOps Engineer",
+    "company": "Cloud Services Co.",
+    "location": "Austin, TX",
+    "description": "We are seeking a DevOps Engineer to manage our cloud infrastructure and CI/CD pipelines.",
+    "technologies": ["AWS", "Docker", "Kubernetes", "Terraform"],
+    "posted_season": "Fall"
+  },
+  {
+    "id": 4,
+    "title": "Backend Engineer",
+    "company": "Secure Systems",
+    "location": "Remote",
+    "description": "Work on the server-side logic and database of our security products.",
+    "technologies": ["Python", "FastAPI", "PostgreSQL"],
+    "posted_season": "Winter"
+  }
+]
