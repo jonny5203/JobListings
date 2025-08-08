@@ -5,7 +5,8 @@
     "company": "Google",
     "location": "Mountain View, CA",
     "description": "Google's software engineers develop the next-generation technologies that change how billions of users connect, explore, and interact with information and one another.",
-    "technologies": ["Python", "C++", "Java"]
+    "technologies": ["Python", "C++", "Java"],
+    "analysis": null
   },
   {
     "id": 2,
@@ -13,7 +14,8 @@
     "company": "Facebook",
     "location": "Menlo Park, CA",
     "description": "Facebook's frontend engineers work on features that are used by millions of people every day.",
-    "technologies": ["JavaScript", "React", "HTML", "CSS"]
+    "technologies": ["JavaScript", "React", "HTML", "CSS"],
+    "analysis": null
   },
   {
     "id": 3,
@@ -21,7 +23,8 @@
     "company": "Netflix",
     "location": "Los Gatos, CA",
     "description": "Netflix's data scientists help the company make better decisions by analyzing data and building models.",
-    "technologies": ["Python", "R", "SQL"]
+    "technologies": ["Python", "R", "SQL"],
+    "analysis": null
   },
   {
     "id": 4,
@@ -29,7 +32,8 @@
     "company": "Amazon",
     "location": "Seattle, WA",
     "description": "Amazon's backend engineers build the services that power the world's largest e-commerce platform.",
-    "technologies": ["Java", "Python", "AWS"]
+    "technologies": ["Java", "Python", "AWS"],
+    "analysis": null
   },
   {
     "id": 5,
@@ -37,7 +41,8 @@
     "company": "Microsoft",
     "location": "Redmond, WA",
     "description": "Microsoft's software engineers work on a wide range of products, from operating systems to cloud services.",
-    "technologies": ["C#", ".NET", "Azure"]
+    "technologies": ["C#", ".NET", "Azure"],
+    "analysis": null
   },
   {
     "id": 6,
@@ -45,6 +50,7 @@
     "company": "Apple",
     "location": "Cupertino, CA",
     "description": "Apple's full stack engineers work on a variety of projects, from the company's website to its internal tools.",
-    "technologies": ["JavaScript", "Python", "Swift"]
+    "technologies": ["JavaScript", "Python", "Swift"],
+    "analysis": null
   }
 ]
