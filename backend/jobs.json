@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "title": "Software Engineer",
+    "company": "Google",
+    "location": "Mountain View, CA",
+    "description": "Google's software engineers develop the next-generation technologies that change how billions of users connect, explore, and interact with information and one another.",
+    "technologies": ["Python", "C++", "Java"]
+  },
+  {
+    "id": 2,
+    "title": "Frontend Developer",
+    "company": "Facebook",
+    "location": "Menlo Park, CA",
+    "description": "Facebook's frontend engineers work on features that are used by millions of people every day.",
+    "technologies": ["JavaScript", "React", "HTML", "CSS"]
+  },
+  {
+    "id": 3,
+    "title": "Data Scientist",
+    "company": "Netflix",
+    "location": "Los Gatos, CA",
+    "description": "Netflix's data scientists help the company make better decisions by analyzing data and building models.",
+    "technologies": ["Python", "R", "SQL"]
+  },
+  {
+    "id": 4,
+    "title": "Backend Engineer",
+    "company": "Amazon",
+    "location": "Seattle, WA",
+    "description": "Amazon's backend engineers build the services that power the world's largest e-commerce platform.",
+    "technologies": ["Java", "Python", "AWS"]
+  },
+  {
+    "id": 5,
+    "title": "Software Engineer",
+    "company": "Microsoft",
+    "location": "Redmond, WA",
+    "description": "Microsoft's software engineers work on a wide range of products, from operating systems to cloud services.",
+    "technologies": ["C#", ".NET", "Azure"]
+  },
+  {
+    "id": 6,
+    "title": "Full Stack Engineer",
+    "company": "Apple",
+    "location": "Cupertino, CA",
+    "description": "Apple's full stack engineers work on a variety of projects, from the company's website to its internal tools.",
+    "technologies": ["JavaScript", "Python", "Swift"]
+  }
+]
