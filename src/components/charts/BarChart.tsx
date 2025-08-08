@@ -43,15 +43,38 @@ const BarChart: React.FC<BarChartProps> = ({ data }) => {
       g.append('g')
         .call(d3.axisLeft(y));
 
+      // Tooltip
+      const tooltip = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0)
+        .style("position", "absolute")
+        .style("background-color", "white")
+        .style("border", "solid")
+        .style("border-width", "1px")
+        .style("border-radius", "5px")
+        .style("padding", "10px");
+
       g.selectAll('mybar')
         .data(data)
         .enter()
         .append('rect')
-        .attr('x', d => x(d.technology) || 0)
-        .attr('y', d => y(d.count))
+        .attr('x', (d: any) => x(d.technology) || 0)
+        .attr('y', (d: any) => y(d.count))
         .attr('width', x.bandwidth())
-        .attr('height', d => height - y(d.count))
-        .attr('fill', '#69b3a2');
+        .attr('height', (d: any) => height - y(d.count))
+        .attr('fill', '#69b3a2')
+        .on('mouseover', (event, d) => {
+            tooltip.style('opacity', 1);
+        })
+        .on('mousemove', (event, d) => {
+            tooltip
+                .html(`Technology: ${d.technology}<br>Count: ${d.count}`)
+                .style('left', (event.pageX + 10) + 'px')
+                .style('top', (event.pageY - 28) + 'px');
+        })
+        .on('mouseleave', (event, d) => {
+            tooltip.style('opacity', 0);
+        });
     }
   }, [data]);
 
