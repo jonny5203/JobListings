@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import JobListing from './JobListing';
+import JobFilter from './JobFilter';
 
 interface Job {
   id: number;
@@ -14,11 +15,13 @@ interface Job {
 const JobList: React.FC = () => {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [filters, setFilters] = useState({ location: '', technology: '' });
 
   useEffect(() => {
     const fetchJobs = async () => {
+      const query = new URLSearchParams(filters).toString();
       try {
-        const response = await fetch('http://localhost:8000/api/jobs');
+        const response = await fetch(`http://localhost:8000/api/jobs?${query}`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -31,7 +34,11 @@ const JobList: React.FC = () => {
     };
 
     fetchJobs();
-  }, []);
+  }, [filters]);
+
+  const handleFilterChange = (newFilters: { location: string; technology: string }) => {
+    setFilters(newFilters);
+  };
 
   if (error) {
     return <div className="error">{error}</div>;
@@ -40,10 +47,11 @@ const JobList: React.FC = () => {
   return (
     <div className="job-list">
       <h1>Job Listings</h1>
+      <JobFilter onFilterChange={handleFilterChange} />
       {jobs.length > 0 ? (
         jobs.map(job => <JobListing key={job.id} job={job} />)
       ) : (
-        <p>Loading jobs...</p>
+        <p>No jobs found matching your criteria.</p>
       )}
     </div>
   );
