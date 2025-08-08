@@ -4,6 +4,7 @@
     <JobFilter @filter-change="updateFilters" />
     <JobList :location="filters.location" :technologies="filters.technologies" />
     <JobStats />
+    <Dashboard />
   </main>
 </template>
 
@@ -12,13 +13,15 @@ import { defineComponent } from 'vue';
 import JobList from './components/JobList.vue';
 import JobFilter from './components/JobFilter.vue';
 import JobStats from './components/JobStats.vue';
+import Dashboard from './components/Dashboard.vue';
 
 export default defineComponent({
   name: 'App',
   components: {
     JobList,
     JobFilter,
-    JobStats
+    JobStats,
+    Dashboard
   },
   data() {
     return {

@@ -43,7 +43,30 @@ def get_job_stats():
     locations = [job['location'] for job in jobs]
     location_counts = Counter(locations)
 
-    return {"location_counts": location_counts}
+    return {
+        "total_jobs": len(jobs),
+        "location_counts": location_counts
+    }
+
+@app.get("/api/jobs/stats/technologies")
+def get_technology_stats(limit: Optional[int] = None):
+    with open('jobs.json', 'r') as f:
+        jobs = json.load(f)
+
+    all_techs = [tech for job in jobs for tech in job['technologies']]
+    tech_counts = Counter(all_techs)
+
+    # Convert to list of dicts and sort
+    sorted_techs = sorted(
+        [{"technology": tech, "count": count} for tech, count in tech_counts.items()],
+        key=lambda x: x['count'],
+        reverse=True
+    )
+
+    if limit:
+        return sorted_techs[:limit]
+
+    return sorted_techs
 
 @app.get("/")
 def read_root():
