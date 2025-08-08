@@ -1,101 +1,71 @@
-import React, { useState } from 'react';
-import { Group } from '@visx/group';
-import { Bar } from '@visx/shape';
-import { scaleBand, scaleLinear, scaleOrdinal } from '@visx/scale';
-import { AxisLeft, AxisBottom } from '@visx/axis';
-import { Pie } from '@visx/shape';
-import { salesData, categoryData } from '../data';
-
-// Define types for data
-type SalesData = typeof salesData[0];
-type CategoryData = typeof categoryData[0];
-
-// Accessors
-const getMonth = (d: SalesData) => d.name;
-const getSalesValue = (d: SalesData, key: 'sales' | 'revenue') => d[key];
-const getCategoryName = (d: CategoryData) => d.name;
-const getCategoryValue = (d: CategoryData) => d.value;
-
-// Dimensions
-const chartWidth = 600;
-const chartHeight = 300;
-const margin = { top: 20, right: 20, bottom: 30, left: 40 };
-const xMax = chartWidth - margin.left - margin.right;
-const yMax = chartHeight - margin.top - margin.bottom;
+import React, { useState, useEffect } from 'react';
+import BarChartComponent from './BarChartComponent';
+import PieChartComponent from './PieChartComponent';
+import LineChartComponent from './LineChartComponent';
+import AreaChartComponent from './AreaChartComponent';
+import { initialSalesData, initialCategoryData, getNewCategoryData } from '../data';
 
 const Report: React.FC = () => {
   const [dataKey, setDataKey] = useState<'sales' | 'revenue'>('sales');
+  const [barChartType, setBarChartType] = useState<'standard' | 'stacked'>('standard');
+  const [salesData, setSalesData] = useState(initialSalesData);
+  const [categoryData, setCategoryData] = useState(initialCategoryData);
 
-  // Bar Chart Scales
-  const xScale = scaleBand<string>({
-    domain: salesData.map(getMonth),
-    range: [0, xMax],
-    padding: 0.4,
-  });
-  const yScale = scaleLinear<number>({
-    domain: [0, Math.max(...salesData.map(d => getSalesValue(d, dataKey)))],
-    range: [yMax, 0],
-  });
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // Animate both charts for a more "live" feel
+      setCategoryData(getNewCategoryData());
+      setSalesData(prev => prev.map(d => ({...d, sales: d.sales * (0.95 + Math.random() * 0.1) })))
+    }, 3000);
 
-  // Pie Chart Scales
-  const pieSize = 300;
-  const radius = pieSize / 2;
-  const colorScale = scaleOrdinal<string, string>({
-    domain: categoryData.map(getCategoryName),
-    range: ['rgba(23, 233, 217, .5)', 'rgba(74, 187, 255, .5)', 'rgba(255, 206, 86, .5)', 'rgba(255, 99, 132, .5)'],
-  });
+    return () => clearInterval(interval);
+  }, []);
+
+  const chartContainerStyle: React.CSSProperties = {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(2, 1fr)',
+    gap: '2rem',
+    padding: '1rem',
+  };
+
+  const chartWrapperStyle: React.CSSProperties = {
+    border: '1px solid #ccc',
+    padding: '1rem',
+    borderRadius: '8px',
+    backgroundColor: '#f9f9f9'
+  };
 
   return (
     <div>
-      <h2>Sales Report (visx)</h2>
-      <div>
-        <button onClick={() => setDataKey('sales')}>Show Sales</button>
-        <button onClick={() => setDataKey('revenue')}>Show Revenue</button>
-      </div>
-      <svg width={chartWidth} height={chartHeight}>
-        <Group left={margin.left} top={margin.top}>
-          {salesData.map(d => {
-            const month = getMonth(d);
-            const barWidth = xScale.bandwidth();
-            const barHeight = yMax - (yScale(getSalesValue(d, dataKey)) ?? 0);
-            const barX = xScale(month);
-            const barY = yMax - barHeight;
-            return (
-              <Bar
-                key={`bar-${month}`}
-                x={barX}
-                y={barY}
-                width={barWidth}
-                height={barHeight}
-                fill="rgba(23, 233, 217, .5)"
-              />
-            );
-          })}
-          <AxisBottom top={yMax} scale={xScale} />
-          <AxisLeft scale={yScale} />
-        </Group>
-      </svg>
+      <h1>Interactive Dashboard</h1>
+      <div style={chartContainerStyle}>
+        <div style={chartWrapperStyle}>
+          <h2>Sales Report</h2>
+          <div>
+            <button onClick={() => setDataKey('sales')}>Show Sales</button>
+            <button onClick={() => setDataKey('revenue')}>Show Revenue</button>
+            <button onClick={() => setBarChartType(t => t === 'standard' ? 'stacked' : 'standard')}>
+              {barChartType === 'standard' ? 'Show Stacked' : 'Show Standard'}
+            </button>
+          </div>
+          <BarChartComponent data={salesData} dataKey={dataKey} chartType={barChartType} width={500} height={300} />
+        </div>
 
-      <h2>Category Distribution (visx)</h2>
-      <svg width={pieSize} height={pieSize}>
-        <Group top={radius} left={radius}>
-          <Pie
-            data={categoryData}
-            pieValue={getCategoryValue}
-            outerRadius={radius}
-          >
-            {pie => (
-              pie.arcs.map((arc, index) => {
-                return (
-                  <g key={`arc-${index}`}>
-                    <path d={pie.path(arc) || ''} fill={colorScale(getCategoryName(arc.data))} />
-                  </g>
-                );
-              })
-            )}
-          </Pie>
-        </Group>
-      </svg>
+        <div style={chartWrapperStyle}>
+          <h2>Category Distribution (Live)</h2>
+          <PieChartComponent data={categoryData} width={500} height={300} />
+        </div>
+
+        <div style={chartWrapperStyle}>
+          <h2>Sales Trend</h2>
+          <LineChartComponent data={salesData} dataKey="sales" width={500} height={300} />
+        </div>
+
+        <div style={chartWrapperStyle}>
+          <h2>Revenue Trend</h2>
+          <AreaChartComponent data={salesData} dataKey="revenue" width={500} height={300} />
+        </div>
+      </div>
     </div>
   );
 };
