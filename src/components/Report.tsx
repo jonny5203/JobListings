@@ -1,71 +1,91 @@
-import React, { useState, useEffect } from 'react';
-import BarChartComponent from './BarChartComponent';
+import React, { Suspense } from 'react';
+import FilterPanel from './FilterPanel';
+import CompanySizeChart from './CompanySizeChart';
 import PieChartComponent from './PieChartComponent';
-import LineChartComponent from './LineChartComponent';
-import AreaChartComponent from './AreaChartComponent';
-import { initialSalesData, initialCategoryData, getNewCategoryData } from '../data';
+import { useData } from '../context/DataContext';
+
+const MapComponent = React.lazy(() => import('./MapComponent'));
 
 const Report: React.FC = () => {
-  const [dataKey, setDataKey] = useState<'sales' | 'revenue'>('sales');
-  const [barChartType, setBarChartType] = useState<'standard' | 'stacked'>('standard');
-  const [salesData, setSalesData] = useState(initialSalesData);
-  const [categoryData, setCategoryData] = useState(initialCategoryData);
+  const { state } = useData();
+  const { filteredJobs } = state;
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      // Animate both charts for a more "live" feel
-      setCategoryData(getNewCategoryData());
-      setSalesData(prev => prev.map(d => ({...d, sales: d.sales * (0.95 + Math.random() * 0.1) })))
-    }, 3000);
+  const experienceData = filteredJobs.reduce((acc, job) => {
+    const level = job.experienceLevel;
+    const existing = acc.find(item => item.name === level);
+    if (existing) {
+      existing.value++;
+    } else {
+      acc.push({ name: level, value: 1 });
+    }
+    return acc;
+  }, [] as { name: string; value: number }[]);
 
-    return () => clearInterval(interval);
-  }, []);
+  const mainContainerStyle: React.CSSProperties = {
+    display: 'flex',
+    flexDirection: 'row',
+    height: '100vh',
+    fontFamily: 'sans-serif'
+  };
 
-  const chartContainerStyle: React.CSSProperties = {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(2, 1fr)',
-    gap: '2rem',
+  const filterPanelStyle: React.CSSProperties = {
+    width: '250px',
+    flexShrink: 0,
+    overflowY: 'auto',
     padding: '1rem',
+    borderRight: '1px solid #ccc'
+  };
+
+  const contentStyle: React.CSSProperties = {
+    flexGrow: 1,
+    padding: '1rem',
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr',
+    gridTemplateRows: 'auto 1fr',
+    gap: '1rem',
+    overflow: 'auto',
+  };
+
+  const h1Style: React.CSSProperties = {
+    gridColumn: '1 / -1',
+    margin: 0,
+  };
+
+  const mapStyle: React.CSSProperties = {
+    gridColumn: '1 / -1',
+    minHeight: '400px',
+    border: '1px solid #ddd',
+    borderRadius: '8px',
   };
 
   const chartWrapperStyle: React.CSSProperties = {
-    border: '1px solid #ccc',
+    border: '1px solid #ddd',
     padding: '1rem',
     borderRadius: '8px',
     backgroundColor: '#f9f9f9'
   };
 
   return (
-    <div>
-      <h1>Interactive Dashboard</h1>
-      <div style={chartContainerStyle}>
-        <div style={chartWrapperStyle}>
-          <h2>Sales Report</h2>
-          <div>
-            <button onClick={() => setDataKey('sales')}>Show Sales</button>
-            <button onClick={() => setDataKey('revenue')}>Show Revenue</button>
-            <button onClick={() => setBarChartType(t => t === 'standard' ? 'stacked' : 'standard')}>
-              {barChartType === 'standard' ? 'Show Stacked' : 'Show Standard'}
-            </button>
-          </div>
-          <BarChartComponent data={salesData} dataKey={dataKey} chartType={barChartType} width={500} height={300} />
-        </div>
-
-        <div style={chartWrapperStyle}>
-          <h2>Category Distribution (Live)</h2>
-          <PieChartComponent data={categoryData} width={500} height={300} />
-        </div>
-
-        <div style={chartWrapperStyle}>
-          <h2>Sales Trend</h2>
-          <LineChartComponent data={salesData} dataKey="sales" width={500} height={300} />
-        </div>
-
-        <div style={chartWrapperStyle}>
-          <h2>Revenue Trend</h2>
-          <AreaChartComponent data={salesData} dataKey="revenue" width={500} height={300} />
-        </div>
+    <div style={mainContainerStyle}>
+      <div style={filterPanelStyle}>
+        <FilterPanel />
       </div>
+      <main style={contentStyle}>
+        <h1 style={h1Style}>Job Analytics Dashboard</h1>
+        <div style={mapStyle}>
+          <Suspense fallback={<div>Loading Map...</div>}>
+            <MapComponent />
+          </Suspense>
+        </div>
+        <div style={chartWrapperStyle}>
+          <h2>Jobs by Company Size</h2>
+          <CompanySizeChart width={500} height={300} />
+        </div>
+        <div style={chartWrapperStyle}>
+          <h2>Jobs by Experience Level</h2>
+          <PieChartComponent data={experienceData} width={500} height={300} />
+        </div>
+      </main>
     </div>
   );
 };
